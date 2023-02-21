@@ -2,6 +2,7 @@ package org.jsoup.parser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
@@ -11,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Token queue tests.
  */
+
+
 public class TokenQueueTest {
     @Test public void chompBalanced() {
         TokenQueue tq = new TokenQueue(":contains(one (two) three) four");
