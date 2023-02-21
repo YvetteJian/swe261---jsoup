@@ -238,7 +238,12 @@ public void testHashCode() {
     }
 
     // ————————————————————————————————————————————————
-
+    @Test
+    public void testToStringWithEmptyBuffer() {
+        CharacterReader reader = new CharacterReader("");
+        String result = reader.toString();
+        assertEquals("", result);
+    }
 
 
 
