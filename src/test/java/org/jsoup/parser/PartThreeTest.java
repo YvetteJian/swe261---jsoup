@@ -1,5 +1,6 @@
 package org.jsoup.parser;
 import org.jsoup.Jsoup;
+import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Assertions;
@@ -188,6 +189,23 @@ public void testHashCode() {
         TreeBuilder treeBuilder = new HtmlTreeBuilder();
         Parser testParser = new Parser(treeBuilder);
         assertEquals(false,testParser.isContentForTagData("normalName"));
+    }
+
+
+
+    @Test
+    void testMatchesAnyWithNonEmptySequenceAndNoMatch() {
+        assertFalse(new CharacterReader("").matchesAny('a', 'b', 'c'));
+    }
+    @Test
+    void testMatchesDigitWithNonEmptySequenceAndNoMatch() {
+        assertFalse(new CharacterReader("").matchesDigit());
+    }
+
+    @Test
+    public void testRewindToMarkWhenMarkIsNotSet() {
+        CharacterReader reader = new CharacterReader("Hello World");
+        assertThrows(UncheckedIOException.class, reader::rewindToMark);
     }
 
 
