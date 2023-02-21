@@ -208,6 +208,34 @@ public void testHashCode() {
         assertThrows(UncheckedIOException.class, reader::rewindToMark);
     }
 
+    @Test
+    public void testXmlTreeBuilderNewInstance() {
+        XmlTreeBuilder builder = new XmlTreeBuilder();
+        XmlTreeBuilder newBuilder = builder.newInstance();
+
+        assertTrue(newBuilder instanceof XmlTreeBuilder);
+    }
+
+    @Test
+    public void testParseSettingsCopyConstructor() {
+        // Create a ParseSettings object with some values
+        boolean preserveTagCase = true;
+        boolean preserveAttributeCase = false;
+        ParseSettings settings = new ParseSettings(preserveTagCase, preserveAttributeCase);
+
+        // Copy the settings to a new object using the copy constructor
+        ParseSettings copy = new ParseSettings(settings);
+
+        // Verify that the new object has the same values as the original object
+        assertEquals(preserveTagCase, copy.preserveTagCase());
+        assertEquals(preserveAttributeCase, copy.preserveAttributeCase());
+    }
+
+    @Test
+    public void testMatchesAnyWithEmptyQueue() {
+        TokenQueue tq = new TokenQueue("");
+        assertFalse(tq.matchesAny('a', 'b', 'c'));
+    }
 
     // ————————————————————————————————————————————————
 
