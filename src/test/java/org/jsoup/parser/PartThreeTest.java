@@ -1,7 +1,11 @@
 package org.jsoup.parser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -100,6 +104,95 @@ public class PartThreeTest {
         }
         assertEquals(1, htmlTreeBuilder.stack.size());
     }
+
+
+//
+// ------------ Tag Tests -----------------
+@Test
+public void testHashCode() {
+    Tag tag1 = Tag.valueOf("div");
+    Tag tag2 = Tag.valueOf("div");
+    Tag tag3 = Tag.valueOf("a");
+
+    assertEquals(tag1.hashCode(), tag2.hashCode());
+    assertNotEquals(tag1.hashCode(), tag3.hashCode());
+
+}
+
+    @Test
+    public void testIsFormSubmittable() {
+        Tag tag1 = Tag.valueOf("div");
+
+        assertFalse(tag1.isFormSubmittable());
+    }
+
+    @Test
+    public void testToString() {
+        Tag tag1 = Tag.valueOf("div");
+
+        assertEquals("div", tag1.toString());
+    }
+
+
+    // ------------ Parser Tests -----------------
+    @Test
+    public void testSetTreeBuilder() {
+        Parser parser = new Parser(new HtmlTreeBuilder());
+        TreeBuilder newTreeBuilder = new XmlTreeBuilder();
+
+        Parser result = parser.setTreeBuilder(newTreeBuilder);
+
+        assertSame(parser, result);
+        assertSame(newTreeBuilder, parser.getTreeBuilder());
+    }
+
+    @Test
+    public void testSetTrackPosition() throws NoSuchFieldException, IllegalAccessException {
+        Document doc = Jsoup.parse("");
+        Parser parser = doc.parser();
+        Assertions.assertFalse(getTrackPosition(parser)); // initially false
+
+        parser.setTrackPosition(true);
+        Assertions.assertTrue(getTrackPosition(parser)); // set to true
+
+        parser.setTrackPosition(false);
+        Assertions.assertFalse(getTrackPosition(parser)); // set back to false
+    }
+
+    private boolean getTrackPosition(Parser parser) throws NoSuchFieldException, IllegalAccessException {
+        Field field = Parser.class.getDeclaredField("trackPosition");
+        field.setAccessible(true);
+        return (boolean) field.get(parser);
+    }
+
+    @Test
+    public void testParserCopyConstructor() {
+        // Create a TreeBuilder instance (in this case, an instance of XmlTreeBuilder)
+        TreeBuilder treeBuilder = new XmlTreeBuilder();
+
+        // Create a Parser instance
+        Parser parser = new Parser(treeBuilder);
+
+        // Copy the parser using the copy constructor
+        Parser copyParser = new Parser(parser.getTreeBuilder());
+
+        // Ensure that the copied parser has the same properties as the original parser
+        assertEquals(parser.getTreeBuilder().getClass(), copyParser.getTreeBuilder().getClass());
+        assertEquals(parser.getErrors().size(), copyParser.getErrors().size());
+        assertEquals(parser.settings().getClass(), copyParser.settings().getClass());
+        assertEquals(parser.isTrackPosition(), copyParser.isTrackPosition());
+    }
+
+    @Test
+    public void TestParser_() {
+        TreeBuilder treeBuilder = new HtmlTreeBuilder();
+        Parser testParser = new Parser(treeBuilder);
+        assertEquals(false,testParser.isContentForTagData("normalName"));
+    }
+
+
+    // ————————————————————————————————————————————————
+
 
 
 
