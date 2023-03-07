@@ -108,9 +108,10 @@ public class Element extends Node {
 
     @Override
     public Attributes attributes() {
-        if (attributes == null) // not using hasAttributes, as doesn't clear warning
+        if (attributes == null) {
             attributes = new Attributes();
-        return attributes;
+        }
+        return new Attributes(attributes);
     }
 
     @Override
