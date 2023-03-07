@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 
 import static org.jsoup.internal.Normalizer.lowerCase;
 
@@ -51,6 +52,16 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
     String[] keys = new String[InitialCapacity];
     Object[] vals = new Object[InitialCapacity]; // Genericish: all non-internal attribute values must be Strings and are cast on access.
 
+    public Attributes() {
+            Map<String, String> attributes = new HashMap<>();
+        }
+
+    public Attributes(Attributes attributes) {
+        this.size = attributes.size;
+        this.keys = Arrays.copyOf(attributes.keys, attributes.size);
+        this.vals = Arrays.copyOf(attributes.vals, attributes.size);
+    }
+    
     // check there's room for more
     private void checkCapacity(int minNewSize) {
         Validate.isTrue(minNewSize >= size);
