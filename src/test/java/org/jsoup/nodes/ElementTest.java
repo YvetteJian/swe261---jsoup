@@ -2643,4 +2643,18 @@ public class ElementTest {
         doc.body().outerHtml(builder);
         assertEquals("<body>\n <div>\n  One\n </div>\n</body>", builder.toString());
     }
+ 
+    @Test
+    public void testAttributes() {
+        Attributes expected = new Attributes();
+        expected.put("id", "my-div");
+        expected.put("class", "my-class");
+
+        String html = "<html><body><div id=\"my-div\" class=\"my-class\"></div></body></html>";
+        Document document = Jsoup.parse(html);
+        Element div = document.selectFirst("#my-div");
+        Attributes actual = div.attributes();
+
+        assertEquals(expected, actual);
+    }
 }
